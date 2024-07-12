@@ -41,8 +41,11 @@ while($event_data = mysqli_fetch_array($result))
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<<<<<<< HEAD
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+=======
+>>>>>>> 33831868825ef37e3080756bbe95f9c4d0e819a9
     <title>Edit Event Data</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
@@ -50,6 +53,7 @@ while($event_data = mysqli_fetch_array($result))
     <a href="index.php">Home</a>
     <br/><br/>
 
+<<<<<<< HEAD
     <form name="update_event" method="post" action="edit_event.php">
         <table class="table">
             <tr>
@@ -80,5 +84,38 @@ while($event_data = mysqli_fetch_array($result))
     </form>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+=======
+<form name="update_event" method="post" action="edit_event.php">
+    <table border="0">
+        <tr>
+            <td>Nama Acara</td>
+            <td><input type="text" name="event_name" value="<?php echo $event_name;?>"></td>
+        </tr>
+        <tr>
+            <td>Tanggal</td>
+            <td><input type="date" name="event_date" value="<?php echo $event_date;?>"></td>
+        </tr>
+        <tr>
+            <td>Waktu</td>
+            <td><input type="time" name="event_time" value="<?php echo $event_time;?>"></td>
+        </tr>
+        <tr>
+            <td>Deskripsi</td>
+            <td><textarea name="event_description"><?php echo $event_description;?></textarea></td>
+        </tr>
+        <tr>
+            <td>Organizer ID</td>
+            <td><input type="text" name="organizer_id" value="<?php echo $organizer_id;?>"></td>
+        </tr>
+        <tr>
+            <td><input type="hidden" name="event_id" value="<?php echo $event_id;?>"></td>
+            <td><input type="submit" name="update" value="Update"></td>
+        </tr>
+    </table>
+</form>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+>>>>>>> 33831868825ef37e3080756bbe95f9c4d0e819a9
 </body>
 </html>
