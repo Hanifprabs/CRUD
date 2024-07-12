@@ -4,7 +4,7 @@
  */
 
 $databaseHost = 'localhost';
-$databaseName = 'simrs';
+$databaseName = 'manajemen_event';
 $databaseUsername = 'root';
 $databasePassword = '';
 
@@ -12,10 +12,12 @@ $mysqli = mysqli_connect($databaseHost, $databaseUsername, $databasePassword, $d
 if (!$mysqli) {//cek koneksi
     die("Tidak bisa terkoneksi ke database");
 }
-$nama_alat = "";
-$tahun = "";
-$merek = "";
-$lokasi = "";
+
+$event_name = "";
+$event_date = "";
+$event_time = "";
+$event_description = "";
+$organizer_id = "";
 $sukses = "";
 $error = "";
 
@@ -24,40 +26,44 @@ if (isset($_GET["op"])) {
 } else {
     $op = "";
 }
-if($op == 'delete'){
-    $id     = $_GET['id'];
-    $sql1   = "delete from alat where id = '$id'";
-    $q1     = mysqli_query($mysqli,$sql1);
+
+if ($op == 'delete') {
+    $event_id = $_GET['event_id'];
+    $sql1 = "DELETE FROM acara WHERE event_id = '$event_id'";
+    $q1 = mysqli_query($mysqli, $sql1);
     if ($q1) {
         $sukses = "Berhasil hapus data";
     } else {
-        $error = "Gagal melakukakn delete data";
+        $error = "Gagal melakukan delete data";
     }
 }
+
 if ($op == 'edit') {
-    $id = $_GET['id'];
-    $sql1 = "select * from alat where id ='$id'";
+    $event_id = $_GET['event_id'];
+    $sql1 = "SELECT * FROM acara WHERE event_id = '$event_id'";
     $q1 = mysqli_query($mysqli, $sql1);
     $r1 = mysqli_fetch_array($q1);
-    $nama_alat = $r1['nama_alat'];
-    $tahun = $r1['tahun'];
-    $merek = $r1['merek'];
-    $lokasi = $r1['lokasi'];
+    $event_name = $r1['event_name'];
+    $event_date = $r1['event_date'];
+    $event_time = $r1['event_time'];
+    $event_description = $r1['event_description'];
+    $organizer_id = $r1['organizer_id'];
 
-    if ($nama_alat == '') {
+    if ($event_name == '') {
         $error = "Data tidak ditemukan";
     }
 }
 
 if (isset($_POST["simpan"])) {//untuk create
-    $nama_alat = $_POST["nama_alat"];
-    $tahun = $_POST["tahun"];
-    $merek = $_POST["merek"];
-    $lokasi = $_POST["lokasi"];
+    $event_name = $_POST["event_name"];
+    $event_date = $_POST["event_date"];
+    $event_time = $_POST["event_time"];
+    $event_description = $_POST["event_description"];
+    $organizer_id = $_POST["organizer_id"];
 
-    if ($nama_alat && $tahun && $merek && $lokasi) {
+    if ($event_name && $event_date && $event_time && $event_description && $organizer_id) {
         if ($op == 'edit') {//untuk update
-            $sql1 = "update alat set nama_alat = '$nama_alat',tahun='$tahun',merek='$merek',lokasi='$lokasi' where id = '$id'";
+            $sql1 = "UPDATE acara SET event_name = '$event_name', event_date = '$event_date', event_time = '$event_time', event_description = '$event_description', organizer_id = '$organizer_id' WHERE event_id = '$event_id'";
             $q1 = mysqli_query($mysqli, $sql1);
             if ($q1) {
                 $sukses = "Data berhasil diupdate";
@@ -65,7 +71,7 @@ if (isset($_POST["simpan"])) {//untuk create
                 $error = "Data gagal diupdate";
             }
         } else {// untuk insert
-            $sql1 = "insert into alat (nama_alat,tahun,merek,lokasi) values('$nama_alat', '$tahun', '$merek', '$lokasi')";
+            $sql1 = "INSERT INTO acara (event_name, event_date, event_time, event_description, organizer_id) VALUES ('$event_name', '$event_date', '$event_time', '$event_description', '$organizer_id')";
             $q1 = mysqli_query($mysqli, $sql1);
             if ($q1) {
                 $sukses = "Berhasil Memasukkan Data Baru";
@@ -73,10 +79,8 @@ if (isset($_POST["simpan"])) {//untuk create
                 $error = "Gagal memasukkan data";
             }
         }
-
-
     } else {
-        $error = "Silahka Masukkan Semua Data";
+        $error = "Silahkan masukkan semua data";
     }
 }
 ?>
@@ -86,7 +90,7 @@ if (isset($_POST["simpan"])) {//untuk create
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Alat</title>
+    <title>Data Acara</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <style>
@@ -114,7 +118,6 @@ if (isset($_POST["simpan"])) {//untuk create
                     <div class="alert alert-danger" role="alert">
                         <?php echo $error ?>
                     </div>
-
                     <?php
                     header("refresh:5;url=index.php");//5 : detik
                 }
@@ -125,38 +128,43 @@ if (isset($_POST["simpan"])) {//untuk create
                     <div class="alert alert-success" role="alert">
                         <?php echo $sukses ?>
                     </div>
-
                     <?php
                     header("refresh:5;url=index.php");//5 : detik
                 }
                 ?>
                 <form action="" method="POST">
                     <div class="mb-3 row">
-                        <label for="nama_alat" class="col-sm-2 col-form-label">Nama Alat</label>
+                        <label for="event_name" class="col-sm-2 col-form-label">Nama Acara</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="nama_alat" name="nama_alat"
-                                value="<?php echo $nama_alat ?>">
+                            <input type="text" class="form-control" id="event_name" name="event_name"
+                                value="<?php echo $event_name ?>">
                         </div>
                     </div>
                     <div class="mb-3 row">
-                        <label for="tahun" class="col-sm-2 col-form-label">Tahun</label>
+                        <label for="event_date" class="col-sm-2 col-form-label">Tanggal</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="tahun" name="tahun"
-                                value="<?php echo $tahun ?>">
+                            <input type="date" class="form-control" id="event_date" name="event_date"
+                                value="<?php echo $event_date ?>">
                         </div>
                     </div>
                     <div class="mb-3 row">
-                        <label for="merek" class="col-sm-2 col-form-label">Merek</label>
+                        <label for="event_time" class="col-sm-2 col-form-label">Waktu</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="merek" name="merek"
-                                value="<?php echo $merek ?>">
+                            <input type="time" class="form-control" id="event_time" name="event_time"
+                                value="<?php echo $event_time ?>">
                         </div>
                     </div>
                     <div class="mb-3 row">
-                        <label for="lokasi" class="col-sm-2 col-form-label">Lokasi</label>
+                        <label for="event_description" class="col-sm-2 col-form-label">Deskripsi</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="lokasi" name="lokasi"
-                                value="<?php echo $lokasi ?>">
+                            <textarea class="form-control" id="event_description" name="event_description"><?php echo $event_description ?></textarea>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label for="organizer_id" class="col-sm-2 col-form-label">Organizer ID</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="organizer_id" name="organizer_id"
+                                value="<?php echo $organizer_id ?>">
                         </div>
                     </div>
                     <div class="col-12">
@@ -168,43 +176,43 @@ if (isset($_POST["simpan"])) {//untuk create
         <!--untuk mengeluarkan data -->
         <div class="card">
             <div class="card-header text-white bg-secondary">
-                Data Alat
+                Data Acara
             </div>
             <div class="card-body">
                 <table class="table">
                     <thead>
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col">Nama Alat</th>
-                            <th scope="col">Tahun</th>
-                            <th scope="col">Merek</th>
-                            <th scope="col">Lokasi</th>
+                            <th scope="col">Nama Acara</th>
+                            <th scope="col">Tanggal</th>
+                            <th scope="col">Waktu</th>
+                            <th scope="col">Deskripsi</th>
+                            <th scope="col">Organizer ID</th>
                             <th scope="col">Aksi</th>
                         </tr>
                     <tbody>
                         <?php
-                        $sql2 = "select * from alat order by id desc";
+                        $sql2 = "SELECT * FROM acara ORDER BY event_id DESC";
                         $q2 = mysqli_query($mysqli, $sql2);
                         $urut = 1;
                         while ($r2 = mysqli_fetch_array($q2)) {
-                            $id = $r2["id"];
-                            $nama_alat = $r2["nama_alat"];
-                            $tahun = $r2["tahun"];
-                            $merek = $r2["merek"];
-                            $lokasi = $r2["lokasi"];
-
+                            $event_id = $r2["event_id"];
+                            $event_name = $r2["event_name"];
+                            $event_date = $r2["event_date"];
+                            $event_time = $r2["event_time"];
+                            $event_description = $r2["event_description"];
+                            $organizer_id = $r2["organizer_id"];
                             ?>
                             <tr>
                                 <th scope="row"><?php echo $urut++ ?></th>
-                                <td scope="row"><?php echo $nama_alat ?></td>
-                                <td scope="row"><?php echo $tahun ?></td>
-                                <td scope="row"><?php echo $merek ?></td>
-                                <td scope="row"><?php echo $lokasi ?></td>
-                                <td scope="row">
-                                    <a href="index.php?op=edit&id=<?php echo $id ?>"><button type="button"
-                                            class="btn btn-danger">Edit</button></a>
-                                    <a href="index.php?op=delete&id=<?php echo $id ?>" onclick="return confirm ('Yakin mau delete data?')"><button type="button" class="btn btn-warning">Delete</button></a>
-                                    
+                                <td><?php echo $event_name ?></td>
+                                <td><?php echo $event_date ?></td>
+                                <td><?php echo $event_time ?></td>
+                                <td><?php echo $event_description ?></td>
+                                <td><?php echo $organizer_id ?></td>
+                                <td>
+                                    <a href="index.php?op=edit&event_id=<?php echo $event_id ?>"><button type="button" class="btn btn-danger">Edit</button></a>
+                                    <a href="index.php?op=delete&event_id=<?php echo $event_id ?>" onclick="return confirm('Yakin mau delete data?')"><button type="button" class="btn btn-warning">Delete</button></a>
                                 </td>
                             </tr>
                             <?php
@@ -215,7 +223,6 @@ if (isset($_POST["simpan"])) {//untuk create
                 </table>
             </div>
         </div>
-
     </div>
 </body>
 
