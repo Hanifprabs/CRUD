@@ -4,7 +4,7 @@
  */
 
 $databaseHost = 'localhost';
-$databaseName = 'simrs';
+$databaseName = 'manajemen_event';
 $databaseUsername = 'root';
 $databasePassword = '';
 
